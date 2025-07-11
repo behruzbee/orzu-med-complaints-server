@@ -79,6 +79,10 @@ export class BotService {
       return;
     }
 
+    if (text === '/myid') {
+      await ctx.reply(`Ваш Telegram ID: ${ctx.from?.id}`);
+    }
+
     if (text === '❌ Отменить') {
       user.complaintStep = null;
       user.tempBranch = null;
