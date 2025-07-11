@@ -213,7 +213,9 @@ export class BotService {
         relations: ['complaints'],
       });
 
-      if (!user || !user.complaints.length) {
+      const complaints = await this.complaintRepo.find()
+
+      if (!user || !complaints.length) {
         await ctx.reply('❌ У вас пока нет жалоб.');
         return;
       }
@@ -251,7 +253,7 @@ export class BotService {
       });
 
       // Добавление строк
-      user.complaints.forEach((complaint, i) => {
+      complaints.forEach((complaint, i) => {
         const row = worksheet.addRow({
           index: i + 1,
           branch: complaint.branch,
