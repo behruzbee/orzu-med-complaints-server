@@ -192,7 +192,7 @@ export class BotService {
 
   private async routeMainMenu(ctx: TelegrafContext, text: string) {
     switch (text) {
-      case '📋 Просмотр жалоб по статусу':
+      case '📋 Просмотр жалоб':
         await this.showComplaintsByStatus(ctx);
         break;
       case '✍️ Подать жалобу':
@@ -397,7 +397,7 @@ export class BotService {
 
   private getMainMenu() {
     return Markup.keyboard([
-      ['📋 Просмотр жалоб по статусу'],
+      ['📋 Просмотр жалоб'],
       ['✍️ Подать жалобу'],
     ])
       .resize()
