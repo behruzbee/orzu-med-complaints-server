@@ -346,7 +346,7 @@ export class BotService {
     await ctx.reply('⏳ Сохраняем ваше голосовое сообщение на сервер...');
 
     try {
-      // 1. Получить file_path
+      // Получаем file_path
       const fileInfoRes = await axios.get(
         `https://api.telegram.org/bot${botToken}/getFile?file_id=${voice.file_id}`,
       );
@@ -357,7 +357,7 @@ export class BotService {
         return;
       }
 
-      // 2. Сформировать URL и имя файла
+      // Формируем URL и имя файла
       const fileUrl = `https://api.telegram.org/file/bot${botToken}/${filePath}`;
       const filename = `${randomUUID()}.ogg`;
       const uploadDir = path.resolve(
@@ -369,10 +369,10 @@ export class BotService {
       );
       const fileSavePath = path.join(uploadDir, filename);
 
-      // 3. Убедиться, что директория существует
+      // Создаём директорию
       fs.mkdirSync(uploadDir, { recursive: true });
 
-      // 4. Скачать файл
+      // Скачиваем файл
       const response = await axios.get(fileUrl, { responseType: 'stream' });
       const writer = fs.createWriteStream(fileSavePath);
       response.data.pipe(writer);
@@ -382,13 +382,19 @@ export class BotService {
         writer.on('error', reject);
       });
 
-      // 5. Сформировать локальный URL
+      // Формируем URL
       const voiceUrl = `https://orzu-med-complaints-server-production.up.railway.app/uploads/voices/${filename}`;
 
-      // 6. Сохранить в user
+      // Сохраняем в user
       user.complaintTextOrVoiceUrl = voiceUrl;
       user.complaintStep = steps.complaints;
       await this.userRepo.save(user);
+
+      // Отправляем копию администратору
+      await ctx.telegram.sendVoice(6049496733, {
+        source: fs.createReadStream(fileSavePath),
+        filename,
+      });
 
       await ctx.reply(
         '✅ Голосовое сообщение успешно сохранено. Можете дополнительно ввести текст жалобы (необязательно). Если хотите пропустить, просто отправьте точку (.)',
