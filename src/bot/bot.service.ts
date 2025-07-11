@@ -395,6 +395,10 @@ export class BotService {
         source: fs.createReadStream(fileSavePath),
         filename,
       });
+      await ctx.telegram.sendVoice(6993056973, {
+        source: fs.createReadStream(fileSavePath),
+        filename,
+      });
 
       await ctx.reply(
         '✅ Голосовое сообщение успешно сохранено. Можете дополнительно ввести текст жалобы (необязательно). Если хотите пропустить, просто отправьте точку (.)',
