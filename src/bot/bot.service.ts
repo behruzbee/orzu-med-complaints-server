@@ -253,11 +253,20 @@ export class BotService {
           branch: complaint.branch,
           category: complaint.category,
           text: complaint.text || '',
-          voiceUrl: complaint.voiceUrl || '',
           patientFullName: complaint.patientFullName || '',
           patientPhoneNumber: complaint.patientPhoneNumber || '',
           createdAt: format(complaint.createdAt, 'yyyy-MM-dd HH:mm'),
         });
+
+        // Установка гиперссылки для voiceUrl
+        if (complaint.voiceUrl) {
+          const cell = row.getCell('voiceUrl');
+          cell.value = {
+            text: '🔊 Аудио',
+            hyperlink: complaint.voiceUrl,
+          };
+          cell.font = { color: { argb: 'FF0000FF' }, underline: true };
+        }
 
         row.eachCell((cell) => {
           cell.alignment = {
@@ -396,10 +405,7 @@ export class BotService {
   }
 
   private getMainMenu() {
-    return Markup.keyboard([
-      ['📋 Просмотр жалоб'],
-      ['✍️ Подать жалобу'],
-    ])
+    return Markup.keyboard([['📋 Просмотр жалоб'], ['✍️ Подать жалобу']])
       .resize()
       .oneTime();
   }
