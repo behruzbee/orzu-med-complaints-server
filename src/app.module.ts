@@ -13,9 +13,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
-      exclude: ['/api*'], // исключаем любые API
       serveStaticOptions: {
-        index: false, // <--- ВАЖНО: отключает index.html
+        index: false, // чтобы не искал index.html
       },
     }),
     ConfigModule.forRoot({ isGlobal: true }),
