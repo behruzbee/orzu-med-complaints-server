@@ -258,12 +258,11 @@ export class BotService {
           createdAt: format(complaint.createdAt, 'yyyy-MM-dd HH:mm'),
         });
 
-        // Установка гиперссылки для voiceUrl
         if (complaint.voiceUrl) {
           const cell = row.getCell('voiceUrl');
           cell.value = {
-            text: '🔊 Аудио',
-            hyperlink: complaint.voiceUrl,
+            text: '🔊 Аудио' + complaint.voiceUrl.split(`\n`)[1],
+            hyperlink: complaint.voiceUrl.split(`\n`)[0],
           };
           cell.font = { color: { argb: 'FF0000FF' }, underline: true };
         }
