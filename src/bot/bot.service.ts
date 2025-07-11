@@ -23,7 +23,7 @@ const steps = {
 
 @Injectable()
 export class BotService {
-  private readonly CONFIRMATION_CODE = process.env.CONFIRMATION_CODE;
+  private readonly CONFIRMATION_CODE = "2585";
 
   constructor(
     @InjectRepository(User)
@@ -379,7 +379,7 @@ export class BotService {
       });
 
       // 5. Сформировать локальный URL
-      const voiceUrl = `http://localhost:3000/uploads/voices/${filename}`;
+      const voiceUrl = `orzu-med-complaints-server.railway.internal/uploads/voices/${filename}`;
 
       // 6. Сохранить в user
       user.complaintTextOrVoiceUrl = voiceUrl;

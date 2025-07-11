@@ -16,20 +16,19 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
+      type: 'mysql',
+      host: 'mysql.railway.internal',
+      port: 3306,
+      username: 'root',
+      password: 'EiUdEtQJBCdZbyCSdWSXXCMGbPeJQjdJ',
+      database: 'railway',
       entities: [User, Complaint],
       synchronize: true,
     }),
     TelegrafModule.forRoot({
-      token: process.env.BOT_TOKEN as string,
+      token: '7619151064:AAEVptdJNzylzEe6oODm47lszGhro3ptCBw',
     }),
-    BotModule
+    BotModule,
   ],
-
 })
 export class AppModule {}
