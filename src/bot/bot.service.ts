@@ -23,7 +23,7 @@ const steps = {
 
 @Injectable()
 export class BotService {
-  private readonly CONFIRMATION_CODE = "2585";
+  private readonly CONFIRMATION_CODE = '2585';
 
   constructor(
     @InjectRepository(User)
@@ -208,22 +208,18 @@ export class BotService {
     if (!telegramId) return;
 
     try {
-      const user = await this.userRepo.findOne({
-        where: { telegramId },
-        relations: ['complaints'],
+      const complaints = await this.complaintRepo.find({
+        order: { createdAt: 'DESC' },
       });
 
-      const complaints = await this.complaintRepo.find()
-
-      if (!user || !complaints.length) {
-        await ctx.reply('❌ У вас пока нет жалоб.');
+      if (!complaints.length) {
+        await ctx.reply('❌ Жалоб пока нет.');
         return;
       }
 
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet('Жалобы');
 
-      // Устанавливаем колонки
       worksheet.columns = [
         { header: '№', key: 'index', width: 5 },
         { header: 'Филиал', key: 'branch', width: 20 },
@@ -235,7 +231,6 @@ export class BotService {
         { header: 'Создано', key: 'createdAt', width: 20 },
       ];
 
-      // Стили заголовков
       worksheet.getRow(1).eachCell((cell) => {
         cell.font = { bold: true };
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -252,7 +247,6 @@ export class BotService {
         };
       });
 
-      // Добавление строк
       complaints.forEach((complaint, i) => {
         const row = worksheet.addRow({
           index: i + 1,
@@ -277,23 +271,19 @@ export class BotService {
             bottom: { style: 'thin' },
             right: { style: 'thin' },
           };
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-          };
         });
       });
 
       const exportPath = path.resolve(__dirname, '..', '..', 'temp');
       fs.mkdirSync(exportPath, { recursive: true });
 
-      const fileName = `complaints-${telegramId}.xlsx`;
+      const fileName = `all-complaints-${telegramId}.xlsx`;
       const filePath = path.join(exportPath, fileName);
       await workbook.xlsx.writeFile(filePath);
 
       await ctx.replyWithDocument({
         source: filePath,
-        filename: 'Жалобы.xlsx',
+        filename: 'Все_жалобы.xlsx',
       });
 
       fs.unlinkSync(filePath);
@@ -395,7 +385,7 @@ export class BotService {
       console.error('Ошибка при сохранении голосового сообщения:', error);
       await ctx.reply(
         '❌ Произошла ошибка при обработке голосового сообщения. Попробуйте снова.',
-      );        
+      );
     }
   }
 
