@@ -379,7 +379,7 @@ export class BotService {
       });
 
       // 5. Сформировать локальный URL
-      const voiceUrl = `orzu-med-complaints-server.railway.internal/uploads/voices/${filename}`;
+      const voiceUrl = `https://orzu-med-complaints-server-production.up.railway.app/uploads/voices/${filename}`;
 
       // 6. Сохранить в user
       user.complaintTextOrVoiceUrl = voiceUrl;
